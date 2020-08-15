@@ -1,5 +1,5 @@
 # About
-An Ansible playbook to provision ESP-IDF and its prerequisites.
+An Ansible playbook to provision ESP-IDF and its prerequisites on Ubuntu 20.04.
 [ESP-IDF](https://github.com/espressif/esp-idf) is Expressif's development environment for the [ESP32](https://www.espressif.com/en/products/socs/esp32).
 I use this on top of my [ansible-workhorse](https://github.com/aapit/ansible-workhorse) Ansible setup.
 
