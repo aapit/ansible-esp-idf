@@ -1,0 +1,8 @@
+---
+- name: Provision main machine
+  hosts: localhost
+  become: yes
+
+  roles:
+    - { role: prerequisites, tags: prerequisites }
+    - { role: esp-idf, tags: idf }

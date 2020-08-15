@@ -1,0 +1,56 @@
+---
+# TODO: Create fallback in case XDG_CONFIG_HOME is unset.
+
+- name: Fetch XDG config dir
+  set_fact:
+    xdg_config: "{{lookup('env', 'XDG_CONFIG_HOME')}}"
+  become: no
+
+- name: Set IDF dir
+  set_fact:
+    idf_dir: "{{ xdg_config }}/esp-idf"
+
+- name: Set IDF tools dir
+  set_fact:
+    idf_tools_dir: "{{ xdg_config }}/esp-idf/tools"
+
+- name: Install ESP-IDF | Espressif IoT Development Framework
+  git:
+    repo: 'https://github.com/espressif/esp-idf.git'
+    dest: "{{ xdg_config }}/esp-idf"
+    version: release/v4.2
+    depth: 1
+  become: no
+
+# TODO: Add [repo]/tools to $PATH
+- name: Create symlink to idf.py in local bin path
+  file:
+    src: "{{ idf_tools_dir }}/idf.py"
+    dest: ~/.local/bin/idf
+    state: link
+  become: no
+
+- name: Permanently add IDF tools dir to $PATH and set $IDF_PATH
+  copy:
+   dest: /etc/profile.d/esp-idf-path.sh
+   content: "#!/bin/sh\nexport PATH=$PATH:{{ idf_tools_dir }}\nexport IDF_PATH={{ idf_dir }}"
+   mode: u=rwx,g=rx,o=rx
+
+- name: Filter illegal Windows instructions from Python reqs
+  replace:
+    path: "{{ idf_dir }}/requirements.txt"
+    regexp: '^file://(.*)$'
+
+- name: Install Pip packages
+  pip:
+    requirements: "requirements.txt"
+    extra_args: --user
+    chdir: "{{ idf_dir }}"
+  become: no
+
+- name: Print final user instructions
+  debug: msg="Log out and back in to activate possibly new permissions.
+             This will also enable the necessary path config.
+             Or run '. /etc/profile.d/esp-idf-path.sh' if you want to 
+             set the path now for this session, but this will not set the
+             permissions."

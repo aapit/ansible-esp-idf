@@ -1,0 +1,68 @@
+---
+- name: Install Git
+  apt:
+    name: git
+
+- name: Install wget
+  apt:
+    name: wget
+
+- name: Install bison
+  apt:
+    name: git
+
+- name: Install gperf
+  apt:
+    name: gperf
+
+- name: Install Python 3
+  apt:
+    name: python3
+
+- name: Install Pip
+  apt:
+    name: python3-pip
+
+- name: Install Python setuptools
+  apt:
+    name: python3-setuptools
+
+- name: Install Python 3 as python alternative
+  command: update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+
+- name: Install cmake
+  apt:
+    name: cmake
+
+- name: Install ninja-build
+  apt:
+    name: ninja-build
+
+- name: Install ccache
+  apt:
+    name: ccache
+
+- name: Install libffi-dev
+  apt:
+    name: libffi-dev
+
+- name: Install libssl-dev
+  apt:
+    name: libssl-dev
+
+- name: Install dfu-util
+  apt:
+    name: dfu-util
+
+- name: Fetch user name (non-root)
+  set_fact:
+    username: "{{lookup('env', 'USER')}}"
+  become: no
+
+- name: Add user to 'dialout' group
+  user:
+    name: "{{ username }}"
+    append: yes
+    groups: dialout
+  become_user: root
+  become: yes
