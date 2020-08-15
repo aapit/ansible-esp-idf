@@ -6,6 +6,8 @@ I use this on top of my [ansible-workhorse](https://github.com/aapit/ansible-wor
 # Warning
 Running this playbook sets the default Python version to `python3`.
 Python 2 is still the default on some systems, even though it's end-of-life since 2021.
+This can have unintended consequences, depending on your setup.
+It works fine for me, but proceed at your own risk.
 
 # Prerequisites
 You have to have the `XDG_CONFIG_HOME` environment variable set.
