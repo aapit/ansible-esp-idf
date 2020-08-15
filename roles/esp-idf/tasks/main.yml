@@ -22,7 +22,6 @@
     depth: 1
   become: no
 
-# TODO: Add [repo]/tools to $PATH
 - name: Create symlink to idf.py in local bin path
   file:
     src: "{{ idf_tools_dir }}/idf.py"
