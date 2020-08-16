@@ -35,16 +35,25 @@
    content: "#!/bin/sh\nexport PATH=$PATH:{{ idf_tools_dir }}\nexport IDF_PATH={{ idf_dir }}"
    mode: u=rwx,g=rx,o=rx
 
+- name: Copy Python reqs for a version we can clean up without messing with future updates
+  copy:
+    src: "{{ idf_dir }}/requirements.txt"
+    dest: "{{ idf_dir }}/requirements-linux.txt"
+
 - name: Filter illegal Windows instructions from Python reqs
   replace:
-    path: "{{ idf_dir }}/requirements.txt"
+    path: "{{ idf_dir }}/requirements-linux.txt"
     regexp: '^file://(.*)$'
 
 - name: Install Pip packages
   pip:
-    requirements: "requirements.txt"
+    requirements: "requirements-linux.txt"
     extra_args: --user
     chdir: "{{ idf_dir }}"
+  become: no
+
+- name: Run post-install, installing the accompanying tools (compiler, debugger, Python packages)
+  command: "{{ idf_dir }}/install.sh"
   become: no
 
 - name: Print final user instructions
