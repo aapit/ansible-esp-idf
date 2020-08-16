@@ -18,7 +18,7 @@
   git:
     repo: 'https://github.com/espressif/esp-idf.git'
     dest: "{{ xdg_config }}/esp-idf"
-    version: release/v4.2
+    version: release/v4.0
     depth: 1
   become: no
 
